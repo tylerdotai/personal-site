@@ -1,6 +1,10 @@
-# Tyler Delano
+# Tyler Delano Terminal Portfolio
 
-I build things. Not a dev by trade. But I build like one.
+A terminal-style portfolio website.
+
+🌐 **Live Site**: https://tylerdotai.netlify.app
+
+---
 
 ## Projects
 
