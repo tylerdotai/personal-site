@@ -2,29 +2,39 @@
 
 Terminal-style personal website for Tyler Delano, built as a minimal portfolio and project index.
 
-## Status
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=nextdotjs)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](#)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss)](#)
 
-- Active personal site repo
-- Live portfolio is public
-- Current app is a lightweight Next.js frontend with a simple single-page layout
+## Live Demo
+
+- Live site: `https://tylerdotai.github.io/personal-site`
+- Repository: `https://github.com/tylerdotai/personal-site`
 
 ## About
 
-This project powers a personal site with a stripped-down, terminal-inspired presentation. It highlights featured projects, contact links, and homelab context while keeping the structure intentionally minimal.
+This repo powers a stripped-down, terminal-inspired personal website. It highlights featured projects, contact links, and homelab context while keeping the layout intentionally lightweight and easy to update.
 
-## Current Scope
+## Tech Stack
 
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 |
+| UI | React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4 |
+| Hosting | GitHub Pages |
+
+## Features
+
+### Site Content
 - Hero section with personal bio and contact links
 - Featured project links for Flume, Jarvis AI, and Titan AI
 - Homelab inventory section
-- Minimal App Router Next.js structure for quick edits and deployment
 
-## Built With
-
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS 4
+### Developer Experience
+- Minimal App Router structure for fast edits
+- Standard Next.js scripts for local development and builds
 
 ## Project Structure
 
@@ -50,7 +60,14 @@ cd personal-site
 npm install
 ```
 
-## Development
+## Deployment
+
+The site is published publicly as a lightweight personal portfolio.
+
+- Live site: `https://tylerdotai.github.io/personal-site`
+- Repository: `https://github.com/tylerdotai/personal-site`
+
+## Usage
 
 ```bash
 npm run dev
@@ -64,18 +81,11 @@ npm run start
 npm run lint
 ```
 
-## Deployment
-
-The site is published publicly as a lightweight personal portfolio.
-
-- Live site: `https://tylerdotai.github.io/personal-site`
-- Repository: `https://github.com/tylerdotai/personal-site`
-
 ## Current Limitations
 
 - The repo does not document the exact deployment pipeline yet
 - It is intentionally minimal and does not include a CMS or content system
-- The current README had drifted into profile-style copy rather than repo documentation
+- The earlier README read more like a profile page than repo documentation
 
 ## Roadmap
 
