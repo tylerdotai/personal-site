@@ -1,42 +1,89 @@
-# Tyler Delano 👋
+# Personal Site
 
-📍 **Texas** | 🤖 **Builder** | 🏡 **1-Acre Homestead**
+Terminal-style personal website for Tyler Delano, built as a minimal portfolio and project index.
 
-![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat-square&logo=next.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Tailwind](https://img.shields.io/badge/-Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+## Status
 
-🌐 **Live Terminal**: https://tylerdotai.github.io/personal-site
+- Active personal site repo
+- Live portfolio is public
+- Current app is a lightweight Next.js frontend with a simple single-page layout
 
-> A terminal-style portfolio website. Type `help` to get started.
+## About
 
-## 🖥️ The Terminal
+This project powers a personal site with a stripped-down, terminal-inspired presentation. It highlights featured projects, contact links, and homelab context while keeping the structure intentionally minimal.
 
-Features a fully interactive terminal with:
-- Boot sequence with typewriter effect
-- Tab completion
-- File system navigation (`ls`, `cd`, `cat`)
-- Easter eggs: `coffee`, `tea`, `matrix`, `neofetch`, `game`
-- Number guessing game
+## Current Scope
 
-## 📦 Projects
+- Hero section with personal bio and contact links
+- Featured project links for Flume, Jarvis AI, and Titan AI
+- Homelab inventory section
+- Minimal App Router Next.js structure for quick edits and deployment
 
-| Project | Description | Link |
-|---------|-------------|------|
-| **Flume** | Task manager for humans & AI agents | [flume.sh](https://flume.sh) |
-| **Jarvis AI** | Desktop assistant with local LLMs | [GitHub](https://github.com/tylerdotai/jarvis-ai) |
-| **Titan AI** | Local AI code generation | [GitHub](https://github.com/tylerdotai/titan-ai) |
+## Built With
 
-## 🛠️ Stack
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
 
-Next.js • TypeScript • Tailwind CSS • React
+## Project Structure
 
-## 🔗 Connect
+```text
+src/app/page.tsx      Main site content
+src/app/layout.tsx    Root layout and metadata
+src/app/globals.css   Global styles
+package.json          Scripts and dependencies
+```
 
-- **GitHub**: @tylerdotai
-- **Twitter**: @tylerdotai
-- **Email**: tyler.delano@icloud.com
+## Getting Started
 
----
+### Prerequisites
 
-*Built with coffee and chaos.*
+- Node.js 20+
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/tylerdotai/personal-site.git
+cd personal-site
+npm install
+```
+
+## Development
+
+```bash
+npm run dev
+```
+
+Additional commands:
+
+```bash
+npm run build
+npm run start
+npm run lint
+```
+
+## Deployment
+
+The site is published publicly as a lightweight personal portfolio.
+
+- Live site: `https://tylerdotai.github.io/personal-site`
+- Repository: `https://github.com/tylerdotai/personal-site`
+
+## Current Limitations
+
+- The repo does not document the exact deployment pipeline yet
+- It is intentionally minimal and does not include a CMS or content system
+- The current README had drifted into profile-style copy rather than repo documentation
+
+## Roadmap
+
+- Document the deployment flow clearly
+- Add richer project case studies and screenshots
+- Improve SEO and social metadata
+- Expand the site beyond the current one-page layout
+
+## License
+
+No license has been added yet.
