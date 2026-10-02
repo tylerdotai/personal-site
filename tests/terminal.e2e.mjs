@@ -80,11 +80,11 @@ test('phone presentation has a usable prompt, no clipped welcome, and no overlap
 test('deployed page describes current portfolio without a broken font request', async () => {
   const page = await pageFor({ width: 1280, height: 800 });
   const failures = [];
-  page.on('response', response => { if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
+  page.on('response', response => { if (response.status() >= 400) failures.push({ status: response.status(), url: response.url() }); });
   try {
     await page.reload({ waitUntil: 'networkidle' });
     assert.match(await page.title(), /Tyler Delano/);
     assert.ok(await page.locator('meta[property="og:title"]').count());
-    assert.ok(!failures.some(line => line.includes('fonts.gstatic.com')), failures.join('\n'));
+    assert.ok(!failures.some(({ url }) => new URL(url).hostname === 'fonts.gstatic.com'), JSON.stringify(failures));
   } finally { await page.close(); }
 });

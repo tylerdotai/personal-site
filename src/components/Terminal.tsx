@@ -51,9 +51,13 @@ function MatrixCanvas({ onComplete }: { onComplete: () => void }) {
 }
 
 function renderLine(line: string) {
-  return line.split(/(https?:\/\/[^\s<>"']+)/g).map((part, index) =>
-    index % 2 ? <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">{part}</a> : part
-  );
+  return line.split(/(https?:\/\/[^\s<>"']+)/g).map((part, index) => {
+    const link = [projects.abc.url, projects["agent-loop"].url, projects.captcha.url,
+      "https://github.com/tylerdotai", "https://x.com/tylerdotai"].find(url => url === part);
+    return index % 2 && link
+      ? <a key={index} href={link} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">{part}</a>
+      : part;
+  });
 }
 
 export default function Terminal() {
