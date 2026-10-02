@@ -13,7 +13,7 @@ Terminal-style personal website for Tyler Delano, built as a minimal portfolio a
 
 ## About
 
-This repo powers a stripped-down, terminal-inspired personal website. It highlights featured projects, contact links, and homelab context while keeping the layout intentionally lightweight and easy to update.
+This repo powers Tyler Delano's interactive terminal portfolio. Type commands or use the visible shortcuts to explore current projects and contact information.
 
 ## Tech Stack
 
@@ -28,9 +28,9 @@ This repo powers a stripped-down, terminal-inspired personal website. It highlig
 ## Features
 
 ### Site Content
-- Hero section with personal bio and contact links
-- Featured project links for Flume, Jarvis AI, and Titan AI
-- Homelab inventory section
+- Skippable terminal boot sequence, command history, autocomplete, and shortcuts
+- Featured links to Agent Builders Club, Agent Loop System, and Worst Captcha Challenge
+- `cat homelab`, `cat stack`, and terminal Easter eggs
 
 ### Developer Experience
 - Minimal App Router structure for fast edits
@@ -39,9 +39,11 @@ This repo powers a stripped-down, terminal-inspired personal website. It highlig
 ## Project Structure
 
 ```text
-src/app/page.tsx      Main site content
+src/app/page.tsx      Terminal entry point
+src/components/Terminal.tsx  Terminal commands and content
 src/app/layout.tsx    Root layout and metadata
 src/app/globals.css   Global styles
+tests/terminal.e2e.mjs  Browser regression contract
 package.json          Scripts and dependencies
 ```
 
@@ -57,12 +59,12 @@ package.json          Scripts and dependencies
 ```bash
 git clone https://github.com/tylerdotai/personal-site.git
 cd personal-site
-npm install
+npm ci
 ```
 
 ## Deployment
 
-The site is published publicly as a lightweight personal portfolio.
+Pushes to `main` run `.github/workflows/deploy.yml`: install, build the static export in `out/`, and publish that artifact to GitHub Pages. The Pages URL uses the `/personal-site/` base path from `next.config.ts`. The existing `tylerdotai.com` website is a separate project and is not changed by this workflow.
 
 - Live site: `https://tylerdotai.github.io/personal-site`
 - Repository: `https://github.com/tylerdotai/personal-site`
@@ -77,22 +79,19 @@ Additional commands:
 
 ```bash
 npm run build
-npm run start
 npm run lint
+npx tsc --noEmit
 ```
+
+Browser checks require Playwright available to Node and a Chrome binary. From this workspace, start `npm run dev -- --port 8138`, then run `node --test --test-reporter=spec tests/terminal.e2e.mjs`. Set `SITE_URL` to exercise a published Pages URL instead. Screenshots and a test log can be saved under `artifacts/e2e/` (ignored by git); for example: `mkdir -p artifacts/e2e && node --test --test-reporter=spec tests/terminal.e2e.mjs > artifacts/e2e/results.txt 2>&1`.
 
 ## Current Limitations
 
-- The repo does not document the exact deployment pipeline yet
-- It is intentionally minimal and does not include a CMS or content system
-- The earlier README read more like a profile page than repo documentation
+- Intentionally static; project descriptions are edited in `src/components/Terminal.tsx`.
 
 ## Roadmap
 
-- Document the deployment flow clearly
-- Add richer project case studies and screenshots
-- Improve SEO and social metadata
-- Expand the site beyond the current one-page layout
+- Keep featured links current and working.
 
 ## License
 
