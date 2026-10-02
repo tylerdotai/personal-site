@@ -9,18 +9,23 @@ const projects = {
 };
 
 const welcome = [
+  "",
   "╔════════════════════════════════════════════════════╗",
   "║  ⚡ TYLER DELANO - AUTHORIZED USER            ║",
   "║  LEVEL: BUILDER • ACCESS: GRANTED            ║",
   "╚════════════════════════════════════════════════════╝",
-  "Tyler Delano. IT Support Associate. AI agent builder.",
-  "Try: projects | about | help",
+  "",
+  "  Tyler Delano. IT Support by day. Code by night.",
+  "  Local LLMs. Homelab. Shipped apps.",
+  "",
+  "  Try: projects | about | help",
+  "",
 ];
 
 const bootLines = [
   "> TYLER_OS v1.0 initializing...",
   "> Loading neural interfaces...",
-  "> Connecting to Titan cluster...",
+  "> Mounting project files...",
   "> System ready.",
   "> SYSTEM LOAD: [████████████████████] 100%",
 ];
@@ -51,12 +56,18 @@ function MatrixCanvas({ onComplete }: { onComplete: () => void }) {
 }
 
 function renderLine(line: string) {
-  return line.split(/(https?:\/\/[^\s<>"']+)/g).map((part, index) => {
-    const link = [projects.abc.url, projects["agent-loop"].url, projects.captcha.url,
-      "https://github.com/tylerdotai", "https://x.com/tylerdotai"].find(url => url === part);
-    return index % 2 && link
-      ? <a key={index} href={link} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">{part}</a>
-      : part;
+  return line.split("\n").map((row, rowIndex) => {
+    const title = row.startsWith("PROJECTS") || /^0[1-3]  /.test(row);
+    const detail = Object.values(projects).some(project => project.description === row) || row.startsWith("https:");
+    return <span key={rowIndex} className={`block ${row === "" ? "h-3" : ""} ${title ? "text-yellow-300" : ""} ${detail || /^0[1-3]  /.test(row) ? "pl-4" : ""} ${row.startsWith("https:") ? "text-gray-500" : ""}`}>
+      {row.split(/(https?:\/\/[^\s<>"']+)/g).map((part, index) => {
+        const link = [projects.abc.url, projects["agent-loop"].url, projects.captcha.url,
+          "https://github.com/tylerdotai", "https://x.com/tylerdotai"].find(url => url === part);
+        return index % 2 && link
+          ? <a key={index} href={link} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline underline-offset-2">{Object.values(projects).some(project => project.url === link) ? "↗ visit" : link === "https://x.com/tylerdotai" ? "↗ X" : "↗ GitHub"}</a>
+          : part;
+      })}
+    </span>;
   });
 }
 
@@ -68,29 +79,36 @@ export default function Terminal() {
   const [dir, setDir] = useState("/Users/tyler");
   const [booting, setBooting] = useState(true);
   const [matrixMode, setMatrixMode] = useState(false);
-  const bootTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bootTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const drinkTimers = useRef<Set<ReturnType<typeof setInterval>>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    let step = 1;
-    const advance = () => {
-      if (step < bootLines.length) {
-        setLines(bootLines.slice(0, ++step));
-        bootTimer.current = setTimeout(advance, 180);
+    const timers = drinkTimers.current;
+    let step = 0;
+    let character = 1;
+    bootTimer.current = setInterval(() => {
+      if (character <= bootLines[step].length) {
+        setLines([...bootLines.slice(0, step), bootLines[step].slice(0, character++)]);
+      } else if (++step < bootLines.length) {
+        character = 1;
       } else {
-        setLines([...bootLines, "", ...welcome, ""]);
+        if (bootTimer.current) clearInterval(bootTimer.current);
+        setLines([...bootLines, ...welcome]);
         setBooting(false);
       }
+    }, 17);
+    return () => {
+      if (bootTimer.current) clearInterval(bootTimer.current);
+      timers.forEach(clearInterval);
     };
-    bootTimer.current = setTimeout(advance, 180);
-    return () => { if (bootTimer.current) clearTimeout(bootTimer.current); };
   }, []);
 
   useEffect(() => { if (!booting) inputRef.current?.focus(); }, [booting]);
 
   const skipBoot = () => {
-    if (bootTimer.current) clearTimeout(bootTimer.current);
-    setLines(["> TYLER_OS ready.", "", ...welcome, ""]);
+    if (bootTimer.current) clearInterval(bootTimer.current);
+    setLines(["> TYLER_OS ready.", ...welcome]);
     setBooting(false);
   };
 
@@ -101,9 +119,23 @@ export default function Terminal() {
     setInput("");
   };
 
-  const listProjects = () => "PROJECTS:\n" + Object.entries(projects)
-    .map(([key, project]) => `• ${project.name} — ${project.description}\n  ${project.url}\n  cat projects/${key}`)
-    .join("\n");
+  const listProjects = () => "PROJECTS // 03 FEATURED\n\n" + Object.entries(projects)
+    .map(([key, project], index) => `0${index + 1}  ${project.name}\n${project.description}\n${project.url}   cat projects/${key}`)
+    .join("\n\n");
+
+  const animateDrink = (command: string, action: string, complete: string) => {
+    const marker = `${action}: [`;
+    append(command, `${action === "BREWING" ? "> Grinding beans..." : "🤠 Texas Sweet Tea Protocol ENGAGED..."}\n> ${marker}${"░".repeat(10)}] 0%`);
+    let progress = 0;
+    const timer = setInterval(() => {
+      progress++;
+      setLines(previous => previous.map(line => line.includes(marker)
+        ? `${action === "BREWING" ? "> Grinding beans..." : "🤠 Texas Sweet Tea Protocol ENGAGED..."}\n> ${marker}${"█".repeat(progress)}${"░".repeat(10 - progress)}] ${progress * 10}%${progress === 10 ? `\n${complete}` : ""}`
+        : line));
+      if (progress === 10) { clearInterval(timer); drinkTimers.current.delete(timer); }
+    }, 110);
+    drinkTimers.current.add(timer);
+  };
 
   const runCommand = (value: string) => {
     const [rawCommand = "", arg] = value.trim().split(/\s+/);
@@ -147,8 +179,8 @@ export default function Terminal() {
       case "tree": output = ".\nabout.txt\nprojects/\n  abc\n  agent-loop\n  captcha\nhomelab\nstack\nlinks\ncontact"; break;
       case "open": if (arg && /^https?:\/\/[^\s<>"']+$/.test(arg)) { window.open(arg, "_blank", "noopener,noreferrer"); output = `Opening ${arg}...`; } else output = "Usage: open [https://url]"; break;
       case "history": output = history.map((entry, i) => `  ${i + 1}  ${entry}`).join("\n"); break;
-      case "coffee": output = "> Grinding beans...\n[✓] Coffee ready. Focus +100%"; break;
-      case "tea": output = "🤠 Texas Sweet Tea Protocol ENGAGED...\n[✓] COLD. SWEET. PERFECT."; break;
+      case "coffee": animateDrink(value, "BREWING", "[✓] Coffee ready. Focus +100%"); return;
+      case "tea": animateDrink(value, "SWEETENING", "[✓] COLD. SWEET. PERFECT."); return;
       case "": return;
       default: output = `zsh: command not found: ${cmd}`;
     }
@@ -175,11 +207,10 @@ export default function Terminal() {
 
   return <main className="min-h-screen bg-[#0d0d0d] p-4 font-mono text-sm text-gray-300 break-words">
     {matrixMode && <MatrixCanvas onComplete={() => { setMatrixMode(false); setLines(previous => [...previous, "(MATRIX) Reality restored."]); }} />}
-    {lines.map((line, i) => <div key={i} data-welcome={line.startsWith("╔") ? true : undefined} className={`whitespace-pre-wrap mb-1 ${/[╔║╚]/.test(line[0]) ? "text-yellow-400 text-[10px] sm:text-sm" : line.startsWith(">") ? "text-green-400" : ""}`}>{renderLine(line)}</div>)}
+    {lines.map((line, i) => <div key={i} data-welcome={line.startsWith("╔") ? true : undefined} className={`whitespace-pre-wrap mb-1 ${/[╔║╚]/.test(line[0]) ? "text-yellow-400 text-[10px] sm:text-sm" : line.startsWith(">") ? "text-green-400" : ""}`}>{line.includes("Try: projects") ? <span>  Try: {["projects", "about", "help"].map((item, index) => <span key={item}>{index > 0 && " | "}<button type="button" onClick={() => runCommand(item)} className="cursor-pointer text-green-400 underline underline-offset-2 hover:text-white">{item}</button></span>)}</span> : renderLine(line)}</div>)}
     {booting ? <button type="button" onClick={skipBoot} className="mt-4 text-green-400 underline cursor-pointer">Skip boot →</button> : <>
-      <nav aria-label="Terminal shortcuts" className="flex flex-wrap gap-x-5 gap-y-2 my-5 text-green-400">{["projects", "about", "contact", "help"].map(item => <button type="button" key={item} onClick={() => runCommand(item)} className="cursor-pointer underline hover:text-white">{item}</button>)}</nav>
-      <form onSubmit={event => { event.preventDefault(); runCommand(input); }} className="flex items-center mt-1"><span className="text-green-500 mr-2 shrink-0">Tyler@home ~ $</span><input ref={inputRef} value={input} onChange={event => setInput(event.target.value)} onKeyDown={handleKeyDown} className="bg-transparent outline-none flex-1 min-w-0 text-gray-100" aria-label="Terminal command input" autoComplete="off" /></form>
-      <div data-hints className="mt-6 text-xs text-gray-400">Tab • cat • matrix • coffee • tea • neofetch • joke</div>
+      <form onSubmit={event => { event.preventDefault(); runCommand(input); }} className="flex items-center mt-1"><span className="text-green-500 mr-2 shrink-0">Tyler@home {dir.replace("/Users/tyler", "~")} $</span><input ref={inputRef} value={input} onChange={event => setInput(event.target.value)} onKeyDown={handleKeyDown} className="bg-transparent outline-none flex-1 min-w-0 text-gray-100" aria-label="Terminal command input" autoComplete="off" /></form>
+      <div data-hints className="mt-6 text-xs text-gray-500">Tab • cat • matrix • coffee • tea • neofetch • joke</div>
     </>}
   </main>;
 }

@@ -35,8 +35,11 @@ test('visitor can skip boot and reach three real projects without knowing comman
     for (const title of ['Agent Builders Club', 'Agent Loop System', 'Worst Captcha Challenge']) assert.ok(text.includes(title), title);
     for (const stale of ['Jarvis AI', 'Titan AI', 'Flume - Task']) assert.ok(!text.includes(stale), stale);
     for (const href of ['https://www.agentbuildersclub.dev/', 'https://github.com/tylerdotai/agent-loop-system', 'https://worst-captcha-challenge.vercel.app/']) {
-      assert.ok(await page.locator(`a[href="${href}"]`).count(), href);
+      const link = page.locator(`a[href="${href}"]`);
+      assert.ok(await link.count(), href);
+      assert.match(await link.first().innerText(), /visit/i);
     }
+    assert.ok(!text.includes('https://worst-captcha-challenge.vercel.app/'), 'raw URLs overwhelm the phone layout');
     await page.screenshot({ path: path.join(artifacts, 'desktop-projects.png'), fullPage: true });
   } finally { await page.close(); }
 });
@@ -54,6 +57,9 @@ test('terminal commands remain useful and render input as text, not HTML', async
     assert.match(await page.locator('body').innerText(), /Agent Builders Club/);
     await command(page, 'cat https://example.invalid/\"><svg/id=untrusted-probe>');
     assert.equal(await page.locator('#untrusted-probe').count(), 0);
+    await command(page, 'coffee');
+    await page.getByText(/BREWING: \[/).waitFor();
+    await page.getByText(/Coffee ready/).waitFor({ timeout: 3500 });
     await page.screenshot({ path: path.join(artifacts, 'terminal-commands.png'), fullPage: true });
   } finally { await page.close(); }
 });
