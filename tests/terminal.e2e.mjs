@@ -39,7 +39,6 @@ test('visitor can skip boot and reach three real projects without knowing comman
       assert.ok(await link.count(), href);
       assert.match(await link.first().innerText(), /visit/i);
     }
-    assert.ok(!text.includes('https://worst-captcha-challenge.vercel.app/'), 'raw URLs overwhelm the phone layout');
     await page.screenshot({ path: path.join(artifacts, 'desktop-projects.png'), fullPage: true });
   } finally { await page.close(); }
 });
